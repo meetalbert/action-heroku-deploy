@@ -11,11 +11,24 @@ outputs:
     value: ${{ steps.random-number-generator.outputs.random-id }}
 runs:
   using: "composite"
+
+  # steps:
+  #   - run: echo Hello ${{ inputs.who-to-greet }}.
+  #     shell: bash
+  #   - id: random-number-generator
+  #     run: echo "::set-output name=random-id::$(echo $RANDOM)"
+  #     shell: bash
+  #   - run: ${{ github.action_path }}/goodbye.sh
+  #     shell: bash
+
   steps:
-    - run: echo Hello ${{ inputs.who-to-greet }}.
-      shell: bash
-    - id: random-number-generator
-      run: echo "::set-output name=random-id::$(echo $RANDOM)"
-      shell: bash
-    - run: ${{ github.action_path }}/goodbye.sh
-      shell: bash
+  - name: Setup DPL libraries
+    shell: bash
+    run: |
+      gem install dpl --pre
+      gem install httparty
+  # - name: Deploy
+  #   shell: bash
+  #   run: |
+  #     dpl heroku --api_key $HEROKU_API_KEY --strategy git --app $HEROKU_TARGET_APP_NAME
+  #     ruby .github/scripts/deploy.rb
